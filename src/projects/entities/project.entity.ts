@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Client } from "src/clients/entities/client.entity";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Project {
@@ -16,4 +17,8 @@ export class Project {
 
     @Column({default:false})
     complete: boolean;
+
+    @ManyToOne(() => Client, (client) => client.projects)
+    @JoinColumn({name: 'clientId'})
+    client: Client
 }
