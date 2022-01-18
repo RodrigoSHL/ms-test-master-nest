@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { TasksModule } from './tasks/tasks.module';
 import { ProjectsModule } from './projects/projects.module';
+import { ClientsModule } from './clients/clients.module';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -14,7 +14,7 @@ import { ProjectsModule } from './projects/projects.module';
     autoLoadEntities: true,
     synchronize: true
 
-  }), TasksModule, ProjectsModule],
+  }), ProjectsModule, ClientsModule],
   controllers: [],
   providers: [],
 })
