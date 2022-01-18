@@ -9,12 +9,12 @@ export class ProjectsController {
   constructor(private readonly projectsService: ProjectsService) {}
 
   @Post()
-  create(@Body() createProjectDto: CreateProjectDto) {
+  create(@Body() createProjectDto: CreateProjectDto) : Promise<Project> {
     return this.projectsService.create(createProjectDto);
   }
 
   @Get()
-  getAll() :Promise<Project[]> {
+  getAll() : Promise<Project[]> {
     return this.projectsService.getAll();
   }
 

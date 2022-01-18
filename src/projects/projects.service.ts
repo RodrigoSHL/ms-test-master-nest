@@ -27,7 +27,7 @@ export class ProjectsService {
   }
 
 
-  async getAll() {
+  async getAll() : Promise<Project[]>{
     const found = await this.projectRepository.find();
     if(!found){
       throw new NotFoundException(`Not projects found`);
@@ -35,7 +35,7 @@ export class ProjectsService {
     return found;
   }
 
-  async getProjectById(id: string) {
+  async getProjectById(id: string) : Promise<Project> {
     const found = await this.projectRepository.findOne(id);
     if(!found){
       throw new NotFoundException(`Not found project with ID "${id}"`);
@@ -43,7 +43,7 @@ export class ProjectsService {
     return found;
   }
 
-  async update(id: string, updateProjectDto: UpdateProjectDto) {
+  async update(id: string, updateProjectDto: UpdateProjectDto) : Promise<Project> {
     const project = await this.getProjectById(id);
     this.projectRepository.merge(project, updateProjectDto)
     await this.projectRepository.save(project);
