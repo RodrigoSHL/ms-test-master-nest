@@ -1,16 +1,15 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { NotFoundError, retry } from 'rxjs';
+import { Repository } from 'typeorm';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { Project } from './entities/project.entity';
-import { ProjectsRepository } from './projects.repository';
 
 @Injectable()
 export class ProjectsService {
   constructor(
-    @InjectRepository(ProjectsRepository)
-    private projectRepository : ProjectsRepository
+    @InjectRepository(Project)
+    private projectRepository : Repository<Project>
   ) {}
 
   async create(createProjectDto: CreateProjectDto) : Promise<Project> {
@@ -28,14 +27,18 @@ export class ProjectsService {
   }
 
 
-  findAll() {
-    return `This action returns all projects`;
+  async getAll() {
+    const found = await this.projectRepository.find();
+    if(!found){
+      throw new NotFoundException(`Not projects found`);
+    }
+    return found;
   }
 
   async getProjectById(id: string) {
     const found = await this.projectRepository.findOne(id);
     if(!found){
-      throw new NotFoundException(`No se encontró proyecto con ID "${id}"`);
+      throw new NotFoundException(`Not found project with ID "${id}"`);
     }
     return found;
   }
@@ -44,7 +47,10 @@ export class ProjectsService {
     return `This action updates a #${id} project`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} project`;
+  async deleteProject(id: string): Promise<void> { 
+    const result = await this.projectRepository.delete(id);
+    if(result.affected === 0) {
+      throw new NotFoundException(`Project with ID #${id} not found`)
+    }
   }
 }

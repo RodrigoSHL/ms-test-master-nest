@@ -14,8 +14,8 @@ export class ProjectsController {
   }
 
   @Get()
-  findAll() {
-    return this.projectsService.findAll();
+  getAll() {
+    return this.projectsService.getAll();
   }
 
   @Get('/:id')
@@ -29,7 +29,7 @@ export class ProjectsController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.projectsService.remove(+id);
+  remove(@Param('id') id: string): Promise<void> {
+    return this.projectsService.deleteProject(id);
   }
 }
