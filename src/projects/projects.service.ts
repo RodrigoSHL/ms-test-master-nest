@@ -43,8 +43,11 @@ export class ProjectsService {
     return found;
   }
 
-  update(id: number, updateProjectDto: UpdateProjectDto) {
-    return `This action updates a #${id} project`;
+  async update(id: string, updateProjectDto: UpdateProjectDto) {
+    const project = await this.getProjectById(id);
+    this.projectRepository.merge(project, updateProjectDto)
+    await this.projectRepository.save(project);
+    return project;
   }
 
   async deleteProject(id: string): Promise<void> { 

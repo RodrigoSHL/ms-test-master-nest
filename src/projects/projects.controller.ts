@@ -14,7 +14,7 @@ export class ProjectsController {
   }
 
   @Get()
-  getAll() {
+  getAll() :Promise<Project[]> {
     return this.projectsService.getAll();
   }
 
@@ -24,8 +24,8 @@ export class ProjectsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProjectDto: UpdateProjectDto) {
-    return this.projectsService.update(+id, updateProjectDto);
+  update(@Param('id') id: string, @Body() updateProjectDto: UpdateProjectDto) : Promise<Project>  {
+    return this.projectsService.update(id, updateProjectDto);
   }
 
   @Delete(':id')
