@@ -18,7 +18,9 @@ export class Project {
     @Column({default:false})
     complete: boolean;
 
-    @ManyToOne(() => Client, (client) => client.projects)
+    @ManyToOne(() => Client, (client) => client.projects, {
+        nullable: false
+    })
     @JoinColumn({name: 'clientId'})
     client: Client
 }

@@ -8,5 +8,5 @@ export class CreateProjectDto {
 
     hours: number;
 
-    complete: boolean
+    complete: boolean;
 }

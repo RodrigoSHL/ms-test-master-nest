@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Client } from 'src/clients/entities/client.entity';
 import { Repository } from 'typeorm';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
@@ -9,21 +10,25 @@ import { Project } from './entities/project.entity';
 export class ProjectsService {
   constructor(
     @InjectRepository(Project)
-    private projectRepository : Repository<Project>
+    private readonly projectRepository : Repository<Project>,
+    @InjectRepository(Client)
+    private readonly clientRepository : Repository<Client>
   ) {}
 
-  async create(createProjectDto: CreateProjectDto) : Promise<Project> {
-    const {name, shortName, hours, complete} = createProjectDto;
+  async create(data: any) : Promise<Project> {
+    const client = await this.clientRepository.findOne(data.clientId);
+    if(!client){
+      throw new NotFoundException(`Not found client`);
+    }
+    const newProject = new Project();
+    newProject.name = data.name;
+    newProject.shortName = data.shortName;
+    newProject.hours = data.hours;
+    newProject.complete = data.complete;
+    newProject.client = client;
 
-    const project = this.projectRepository.create({
-      name,
-      shortName,
-      hours,
-      complete
-    })
-
-    await this.projectRepository.save(project)
-    return project;
+    await this.projectRepository.save(newProject)
+    return newProject;
   }
 
 
