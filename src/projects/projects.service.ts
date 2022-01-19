@@ -15,20 +15,22 @@ export class ProjectsService {
     private readonly clientRepository : Repository<Client>
   ) {}
 
-  async create(data: any) : Promise<Project> {
-    const client = await this.clientRepository.findOne(data.clientId);
+  async create(createProjectDto: CreateProjectDto) : Promise<Project> {
+    const client = await this.clientRepository.findOne(createProjectDto.clientId);
     if(!client){
       throw new NotFoundException(`Not found client`);
     }
-    const newProject = new Project();
-    newProject.name = data.name;
-    newProject.shortName = data.shortName;
-    newProject.hours = data.hours;
-    newProject.complete = data.complete;
-    newProject.client = client;
+    
+    const {name, shortName, hours, complete} = createProjectDto;
+    const project = this.projectRepository.create({
+      name,
+      shortName,
+      hours,
+      complete,
+      client});
 
-    await this.projectRepository.save(newProject)
-    return newProject;
+    await this.projectRepository.save(project)
+    return project;
   }
 
 

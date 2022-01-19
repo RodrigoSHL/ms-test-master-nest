@@ -1,4 +1,4 @@
-import { IsNotEmpty } from "class-validator";
+import { IsNotEmpty, IsUUID } from "class-validator";
 
 export class CreateProjectDto {
     @IsNotEmpty()
@@ -9,4 +9,8 @@ export class CreateProjectDto {
     hours: number;
 
     complete: boolean;
+    
+    @IsNotEmpty()
+    @IsUUID()
+    clientId: string;
 }
