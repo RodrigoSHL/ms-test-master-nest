@@ -1,5 +1,6 @@
-import { Client } from "src/clients/entities/client.entity";
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Client } from "../../clients/entities/client.entity";
+import { Stage } from "../../stages/entities/stage.entity";
+import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Project {
@@ -23,4 +24,7 @@ export class Project {
     })
     @JoinColumn({name: 'clientId'})
     client: Client
+
+    @ManyToMany(() => Stage, (stage) => stage.projects)
+    stages: Stage[]
 }
