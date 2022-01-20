@@ -1,5 +1,5 @@
 import { Project } from "../../projects/entities/project.entity";
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Stage {
@@ -11,12 +11,12 @@ export class Stage {
 
     @ManyToMany(() => Project, (project) => project.stages)
     @JoinTable({
-        name: 'relProjectCategory',
+        name: 'relationProjectStage',
         joinColumn: {
             name: 'projectId',
         },
         inverseJoinColumn: {
-            name: 'taskId'
+            name: 'stageId'
         }
     })
     projects: Project[]

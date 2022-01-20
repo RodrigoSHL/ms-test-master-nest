@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Client } from 'src/clients/entities/client.entity';
+import { Client } from '.././clients/entities/client.entity';
+import { Stage } from '.././stages/entities/stage.entity';
 import { Repository } from 'typeorm';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
@@ -12,7 +13,9 @@ export class ProjectsService {
     @InjectRepository(Project)
     private readonly projectRepository : Repository<Project>,
     @InjectRepository(Client)
-    private readonly clientRepository : Repository<Client>
+    private readonly clientRepository : Repository<Client>,
+    @InjectRepository(Stage)
+    private readonly stagesRepository : Repository<Stage>,
   ) {}
 
   async create(createProjectDto: CreateProjectDto) : Promise<Project> {
@@ -20,6 +23,10 @@ export class ProjectsService {
     if(!client){
       throw new NotFoundException(`Not found client`);
     }
+
+    const stagesIds = createProjectDto.stagesIds;
+
+    const stages = await this.stagesRepository.findByIds(stagesIds);
     
     const {name, shortName, hours, complete} = createProjectDto;
     const project = this.projectRepository.create({
@@ -27,12 +34,12 @@ export class ProjectsService {
       shortName,
       hours,
       complete,
-      client});
-
+      client,
+      stages
+    });
     await this.projectRepository.save(project)
     return project;
   }
-
 
   async getAll() : Promise<Project[]>{
     const found = await this.projectRepository.find();

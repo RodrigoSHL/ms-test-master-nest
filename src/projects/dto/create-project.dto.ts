@@ -13,4 +13,6 @@ export class CreateProjectDto {
     @IsNotEmpty()
     @IsUUID()
     clientId: string;
+
+    stagesIds: []
 }
